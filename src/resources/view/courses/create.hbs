@@ -1,0 +1,23 @@
+<div class="mt-4">
+  <h3>Thêm</h3>
+  <form method="post" action="/courses/store">
+    <div class="mb-3">
+      <label for="name" class="form-label">Tên sách</label>
+      <input type="text" class="form-control" id="name" name="name">
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Mô tả</label>
+      <input type="text" class="form-control" id="description" name="description">
+    </div>
+    <div>
+      <select class="form-select mb-3" id="kindOfBook" name="kindOfBook">
+        <option selected>Chọn loại sách</option>
+        <option value="Sách Toán">Sách Toán</option>
+        <option value="Sách Văn">Sách Văn</option>
+        <option value="Sách Self-help">Sách Self-help</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm</button>
+  </form>
+</div>

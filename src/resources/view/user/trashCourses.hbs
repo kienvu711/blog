@@ -1,0 +1,103 @@
+<div class="mt4">
+  <div>
+    <a href="/user/stored/courses">Quay lại</a>
+    <h3>Sách đã xóa của tôi</h3>
+  </div>
+
+
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tên sách</th>
+        <th scope="col">Loại sách</th>
+        <th scope="col" colspan="2">Thời gian xóa</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each courses}}
+      <tr>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.kindOfBook}}</td>
+        <td>{{this.deletedAt}}</td>
+        <td>
+          <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Khôi phục</a>
+          <a href="" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-whatever="{{this._id}}"
+            data-bs-target="#delete-course-modal">Xóa vĩnh viễn</a>
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="5" class="text-center">
+          Thùng rác trống
+          <a href="/user/stored/courses">Quay lại</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-course-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Chú ý</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Không thể khôi phục sau khi xóa. Bạn vẫn muốn tiếp tục?
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-course" type="button" class="btn btn-danger">Xóa vĩnh viễn</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form name="deleteForm" method="post"></form>
+<form name="restoreForm" method="post"></form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const deleteCourseModal = document.getElementById('delete-course-modal')
+    var courseId;
+    var deleteForm = document.forms['deleteForm']
+    var restoreForm = document.forms['restoreForm']
+    const btnsRestore = document.querySelectorAll('.btn-restore');
+    const btnDeleteCourse = document.getElementById('btn-delete-course');
+    if (deleteCourseModal) {
+      deleteCourseModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        courseId = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+
+        // Update the modal's content.
+      })
+    }
+    btnDeleteCourse.onclick = function () {
+      deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE';
+      deleteForm.submit()
+    }
+
+    btnsRestore.forEach(e => {
+      e.addEventListener('click', (event) => {
+        event.preventDefault();
+        const courseId = e.dataset.id;
+        const restoreForm = document.forms["restoreForm"];
+        restoreForm.action = '/courses/' + courseId + '/restore?_method=PATCH';
+        restoreForm.submit();
+      })
+    })
+
+  })
+
+
+</script>
